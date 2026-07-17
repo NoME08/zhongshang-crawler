@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>淑琪同学 · 中商情报网</title>
+<style>
+  :root {
+    --pink: #FF6B8A;
+    --pink-light: #FFB3C7;
+    --pink-ghost: #FFF0F3;
+    --bg: #F5F5F7;
+    --card: rgba(255,255,255,0.84);
+    --text: #1d1d1f;
+    --text-secondary: #86868b;
+    --radius: 18px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { width: 100%; max-width: 560px; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--pink), #FF8FA8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
+  .header .subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  /* Card */
+  .card {
+    background: var(--card);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04), 0 8px 40px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.06);
+    transition: transform 0.2s ease;
+  }
+
+  /* Mode Switch */
+  .mode-switch {
+    display: flex;
+    background: #F0F0F3;
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 24px;
+  }
+  .mode-switch button {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: inherit;
+  }
+  .mode-switch button.active {
+    background: white;
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  /* Slider */
+  .slider-group { margin-bottom: 24px; }
+  .slider-group label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .slider-group .value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--pink);
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--pink-light), var(--pink));
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--pink);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(255,107,138,0.25);
+    transition: transform 0.15s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.15); }
+
+  /* Button */
+  .btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    letter-spacing: 0.3px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--pink), #FF8FA8);
+    color: white;
+    box-shadow: 0 4px 16px rgba(255,107,138,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(255,107,138,0.4); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Progress */
+  .progress-section { display: none; }
+  .progress-section.active { display: block; }
+  .progress-bar-bg {
+    height: 8px;
+    background: #F0F0F3;
+    border-radius: 4px;
+    overflow: hidden;
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #FF6B8A, #FF8FA8, #FFB3C7);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+    100% { background-position: 0 0; }
+  }
+  }
+  }
+  .progress-fraction {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--pink);
+  }
+  .progress-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .progress-title {
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 4px;
+  }
+
+  /* Download */
+  .download-section { display: none; }
+  .download-section.active { display: block; }
+  .download-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--pink);
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    padding: 14px;
+  }
+  .download-link:hover { opacity: 0.8; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+  }
+  .toast.show { opacity: 1; }
+
+  /* Easter Egg */
+  .easter-egg {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.12;
+    transition: opacity 0.3s;
+    user-select: none;
+  }
+  .easter-egg:hover { opacity: 0.6; }
+
+  /* Hearts */
+  .hearts-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  @keyframes heart-float {
+    0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 1; }
+    50% { opacity: 0.9; }
+    100% { transform: translateY(-100vh) scale(1.2) rotate(360deg); opacity: 0; }
+  }
+  .heart-piece {
+    position: absolute;
+    font-size: 22px;
+    animation: heart-float 3s ease-out forwards;
+    filter: drop-shadow(0 2px 4px rgba(255,107,138,0.3));
+  }
+
+  /* Sweet Message Card */
+  .sweet-card {
+    display: none;
+    text-align: center;
+    background: linear-gradient(135deg, #FFF0F3, #FFE0E8);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-top: 16px;
+    border: 1px solid rgba(255,107,138,0.15);
+  }
+  .sweet-card.active { display: block; }
+  .sweet-card .sweet-text {
+    font-size: 14px;
+    color: #FF6B8A;
+    font-weight: 500;
+    line-height: 1.8;
+  }
+  .sweet-card .sweet-heart {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 8px;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  /* Secret Modal */
+  .secret-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  .secret-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .secret-card {
+    background: white;
+    border-radius: 24px;
+    padding: 48px 36px;
+    text-align: center;
+    max-width: 380px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: pop-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes pop-in {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .secret-card h2 {
+    font-size: 22px;
+    margin-bottom: 16px;
+    color: #FF6B8A;
+  }
+  .secret-card .secret-msg {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+  .secret-card .secret-countdown {
+    font-size: 13px;
+    color: #999;
+    margin-top: 12px;
+  }
+  .secret-card button {
+    padding: 10px 32px;
+    border: none;
+    border-radius: 100px;
+    background: linear-gradient(135deg, #FF6B8A, #FF8FA8);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.2s;
+  }
+  .secret-card button:hover { transform: scale(1.05); }
+
+  /* Title click hint */
+  .header h1 {
+    cursor: default;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>中商情报网</h1>
+    <p class="subtitle">淑琪同学的专属爬虫 · 点击即用</p>
+  </div>
+
+  <!-- Settings Card -->
+  <div class="card" id="settingsCard">
+    <div class="mode-switch" id="modeSwitch">
+      <button data-mode="latest" class="active">⏱ 按时间倒序</button>
+      <button data-mode="category">📂 按板块</button>
+    </div>
+
+    <div class="slider-group">
+      <label>
+        <span id="countLabel">文章数量</span>
+        <span class="value" id="countValue">80</span>
+      </label>
+      <input type="range" id="countSlider" min="15" max="200" value="80" step="5">
+    </div>
+
+    <button class="btn btn-primary" id="startBtn" onclick="startCrawl()">
+      ✨ 开始抓取
+    </button>
+  </div>
+
+  <!-- Progress Card -->
+  <div class="card progress-section" id="progressCard">
+    <p class="progress-text" id="progressText">准备中...</p>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+    <p class="progress-fraction" id="progressFraction">0/0</p>
+    <p class="progress-title" id="progressTitle"></p>
+  </div>
+
+  <!-- Download Card -->
+  <div class="card download-section" id="downloadCard">
+    <a class="download-link" id="downloadZip" href="#">📦 下载 PDF 合集 (ZIP)</a>
+    <a class="download-link" id="downloadDocx" href="#" style="margin-top:4px; font-size:14px; opacity:0.7;">📄 下载整合版 (Docx)</a>
+    <a class="download-link" id="downloadTitles" href="#" style="margin-top:4px; font-size:14px; opacity:0.7;">📋 下载文章标题 (Docx)</a>
+    <!-- 甜蜜寄语 -->
+    <div class="sweet-card" id="sweetCard">
+      <span class="sweet-heart">💖</span>
+      <p class="sweet-text" id="sweetText"></p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="easter-egg" id="easterEgg" title="✨">🌸</div>
+<div class="hearts-container" id="hearts"></div>
+
+<!-- Secret Time Machine -->
+<div class="secret-overlay" id="secretOverlay">
+  <div class="secret-card">
+    <h2>💌 Surprise</h2>
+    <p class="secret-msg" id="secretMsg"></p>
+    <p class="secret-countdown" id="secretCountdown"></p>
+    <button onclick="closeSecret()">❤️ 知道了</button>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+let crawlMode = 'latest';
+let easterClicks = 0;
+let titleClicks = 0;
+const EASTER_MSGS = [
+  'Hi淑琪同学，今天也要开心呀 ✨',
+  '别忘记想你男朋友嘻嘻',
+  '淑琪最棒了！',
+  '感动了吗嘿嘿',
+  '世界上最好的女朋友 👩‍💻💖',
+  '太感动记得好好犒劳你的男朋友哦 👨‍💻',
+  '我爱你!',
+];
+
+// Mode switch
+$('#modeSwitch').addEventListener('click', e => {
+  if (e.target.tagName !== 'BUTTON') return;
+  $$('#modeSwitch button').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  crawlMode = e.target.dataset.mode;
+  const label = crawlMode === 'latest' ? '文章数量' : '每板块数量';
+  $('#countLabel').textContent = label;
+});
+
+// Slider
+$('#countSlider').addEventListener('input', e => {
+  $('#countValue').textContent = e.target.value;
+});
+
+// Easter egg（右下角 🌸）
+$('#easterEgg').addEventListener('click', () => {
+  easterClicks++;
+  const idx = (easterClicks - 1) % EASTER_MSGS.length;
+  showToast(EASTER_MSGS[idx]);
+  if (easterClicks % 6 === 0) spawnHearts();
+});
+
+// 标题彩蛋「时光机」：点击标题 7 次触发
+$('.header h1').addEventListener('click', () => {
+  titleClicks++;
+  if (titleClicks >= 7) {
+    titleClicks = 0;
+    openSecret();
+  }
+});
+
+function showToast(msg) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function spawnHearts() {
+  const container = $('#hearts');
+  const hearts = ['💕','💖','💗','💝','💘','💓','🩷','❤️','💞','🌸','✨','🌹'];
+  for (let i = 0; i < 35; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'heart-piece';
+    piece.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.bottom = '0px';
+    piece.style.fontSize = (16 + Math.random() * 20) + 'px';
+    piece.style.animationDelay = Math.random() * 1.5 + 's';
+    piece.style.animationDuration = (2.5 + Math.random() * 2.5) + 's';
+    container.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
+}
+
+// 时光机
+function openSecret() {
+  const today = new Date();
+  const start = new Date(today.getFullYear(), 0, 1);
+  const days = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+  const yearProgress = Math.round(days / 365 * 100);
+
+  const loveStart = new Date('2026-05-01');
+  const togetherDays = Math.floor((today - loveStart) / (1000 * 60 * 60 * 24));
+  const togetherYears = Math.floor(togetherDays / 365);
+  const togetherRemain = togetherDays % 365;
+
+  $('#secretMsg').innerHTML =
+    `🌷 ${today.getFullYear()} 年已经走过了 <b>${yearProgress}%</b><br>` +
+    `今天是今年的第 <b>${days}</b> 天<br><br>` +
+    `💕 <b>我们在一起</b><br>` +
+    `第 <b>${togetherDays}</b> 天<br>` +
+    `（${togetherYears} 年零 ${togetherRemain} 天）<br><br>` +
+    `记得爱我哦 ✨`;
+  $('#secretOverlay').classList.add('active');
+  spawnHearts();
+}
+
+function closeSecret() {
+  $('#secretOverlay').classList.remove('active');
+}
+
+// Crawl
+async function startCrawl() {
+  const count = parseInt($('#countSlider').value);
+  const btn = $('#startBtn');
+  btn.disabled = true;
+  btn.textContent = '启动中...';
+
+  try {
+    const resp = await fetch('/api/crawl', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode: crawlMode, count }),
+    });
+    const data = await resp.json();
+    if (!data.ok) { showToast(data.msg); btn.disabled = false; btn.textContent = '✨ 开始抓取'; return; }
+
+    $('#settingsCard').style.display = 'none';
+    $('#progressCard').classList.add('active');
+
+    // Listen to SSE progress
+    const evtSource = new EventSource('/api/progress');
+    evtSource.onmessage = e => {
+      const p = JSON.parse(e.data);
+      $('#progressText').textContent = p.msg;
+      if (p.total > 0) {
+        const pct = Math.round(p.current / p.total * 100);
+        $('#progressBar').style.width = pct + '%';
+        $('#progressFraction').textContent = `${p.current}/${p.total}`;
+        $('#progressTitle').textContent = p.msg;
+      }
+      if (p.status === 'done') {
+        evtSource.close();
+        $('#progressCard').classList.remove('active');
+        $('#downloadCard').classList.add('active');
+        if (p.result_file) {
+          $('#downloadZip').style.display = '';
+          $('#downloadZip').href = '/output/' + p.result_file.split('/').pop();
+        } else {
+          $('#downloadZip').style.display = 'none';
+        }
+        $('#downloadDocx').href = '/output/' + (p.result_docx || '').split('/').pop();
+        $('#downloadTitles').href = '/output/' + (p.result_titles || '').split('/').pop();
+        if (p.pdf_warning) {
+          showToast('⚠️ ' + p.pdf_warning);
+        }
+        showToast('🎉 抓取完成！');
+        spawnHearts();
+        // 显示甜蜜寄语卡片
+        if (p.sweet_msg) {
+          $('#sweetText').textContent = p.sweet_msg;
+          $('#sweetCard').classList.add('active');
+        }
+      }
+      if (p.status === 'error') {
+        evtSource.close();
+        showToast('❌ ' + p.msg);
+        $('#settingsCard').style.display = '';
+        $('#progressCard').classList.remove('active');
+        btn.disabled = false;
+        btn.textContent = '✨ 开始抓取';
+      }
+    };
+  } catch (err) {
+    showToast('网络错误: ' + err.message);
+    btn.disabled = false;
+    btn.textContent = '✨ 开始抓取';
+  }
+}
+</script>
+</body>
+</html>
